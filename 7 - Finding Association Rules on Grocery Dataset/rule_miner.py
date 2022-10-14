@@ -1,6 +1,5 @@
 import itertools
 
-
 class RuleMiner(object):
 
     def __init__(self, support_t, confidence_t):
@@ -27,7 +26,8 @@ class RuleMiner(object):
         # TODO: Implement this function based on the documentation.
         # Hint: Use the pandas.DataFrame.all() and the pandas.DataFrame.sum()
         # function.
-        pass
+        items_in_basket = (data[itemset] == 1).all(axis=1)
+        return items_in_basket.sum()
 
     def merge_itemsets(self, itemsets):
         """Returns a list of merged itemsets. If one itemset of size 2
@@ -119,7 +119,9 @@ class RuleMiner(object):
                 # greater than or equal to the support threshold support_t
                 # Hint: Use the get_support() function that we have defined in
                 # this class.
-                pass
+                support = self.get_support(data, itemset)
+                if support >= self.support_t:
+                    new_itemsets.append(itemset)
 
             if len(new_itemsets) != 0:
                 old_itemsets = new_itemsets
@@ -146,7 +148,10 @@ class RuleMiner(object):
         # TODO: Implement this function based on the documentation.
         # Hint: Use the get_support() function that we have defined in this
         # class.
-        pass
+        X, y = rule
+        support_X_y = self.get_support(data, X + y)
+        support_X = self.get_support(data, X)
+        return support_X_y / support_X
 
     def get_association_rules(self, data):
         """Returns a list of association rules with support greater than or
@@ -163,6 +168,7 @@ class RuleMiner(object):
 
         # TODO: Call the get_frequent_itemsets() function that we have defined
         # in this class, and assign the result to the variable itemsets.
+        itemsets = self.get_frequent_itemsets(data)
 
         rules = []
         for itemset in itemsets:
@@ -170,7 +176,8 @@ class RuleMiner(object):
             # list rules
             # Hint: Use the get_rules() function that we have defined in this
             # class.
-            pass
+            rule = self.get_rules(itemset)
+            rules += rule # rules = rules + rule
 
         association_rules = []
         for rule in rules:
@@ -179,6 +186,9 @@ class RuleMiner(object):
             # greater than or equal to the confidence threshold confidence_t
             # Hint: Use the get_confidence() function that we have defined in
             # this class.
-            pass
+            confidence = self.get_confidence(data, rule)
+
+            if confidence >= self.confidence_t:
+                association_rules.append(rule)
 
         return association_rules
