@@ -128,7 +128,8 @@ def remove_frequent_words(text_series,
     # TODO: Get all the `num_frequent` frequent words, put it in a `set`,
     # and assign the `set` to the variable `frequent_set`.
     # HINT: Use the `get_frequent_words()` function that we have defined.
-    frequent_set = get_frequent_words(text_series, num_frequent)
+    frequent_words = get_frequent_words(text_series, num_frequent)
+    frequent_set = set([w for (w, c) in frequent_words])
 
     # TODO: For each text in the `Series`, remove the frequent words. Then,
     # append the text without the frequent words to the list `texts`.
